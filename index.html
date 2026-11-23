@@ -1,383 +1,1534 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html lang="id" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DARSAP v13 - Candy Multimedia</title>
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --pink-soft: #ff85a1; --blue-soft: #a29bfe; --green-soft: #55efc4;
-            --bg-sweet: #fdf6ff; --text-dark: #2d3436; --glass: rgba(255, 255, 255, 0.85);
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Daris Rifaldi Setiana — Portofolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap">
+  <style>
+    :root,
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #071324;
+      --surface: #0d1d35;
+      --surface-elevated: #132746;
+      --fg: #eef3fa;
+      --muted: #98abc4;
+      --line: #1c3152;
+      --line-strong: #294570;
+      --accent: #e0a938;
+      --accent-2: #38bdf8;
+      --accent-soft: rgba(224, 169, 56, 0.13);
+      --accent-glow: rgba(224, 169, 56, 0.18);
+      --grid-line: rgba(56, 189, 248, 0.045);
+      --shadow: rgba(0, 0, 0, 0.55);
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+      --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
 
-        * { box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100dvh; overflow: hidden; background: var(--bg-sweet); }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-elevated: #ebf1f8;
+      --fg: #0b1c36;
+      --muted: #4b5e7a;
+      --line: #d5e0ee;
+      --line-strong: #b4c6de;
+      --accent: #b88114;
+      --accent-2: #0055a5;
+      --accent-soft: rgba(184, 129, 20, 0.11);
+      --accent-glow: rgba(0, 85, 165, 0.10);
+      --grid-line: rgba(0, 85, 165, 0.05);
+      --shadow: rgba(11, 28, 54, 0.12);
+    }
 
-        .app-container { display: flex; width: 100%; height: 100%; position: relative; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
-        /* --- SIDEBAR --- */
-        .sidebar { width: 100%; height: 100%; background: transparent; display: flex; flex-direction: column; z-index: 10; padding: 10px; }
-        
-        /* --- CHAT PANEL --- */
-        .chat-panel { 
-            position: absolute; top: 0; left: 100%; width: 100%; height: 100%;
-            background: #fffafa; display: flex; flex-direction: column;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1); z-index: 20; padding: 10px;
-        }
-        .chat-panel.active { transform: translateX(-100%); }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(4.75rem + env(safe-area-inset-top, 0px));
+    }
 
-        @media (min-width: 768px) {
-            .sidebar { width: 350px; }
-            .chat-panel { position: relative; left: 0; flex: 1; transform: none !important; }
-        }
+    body {
+      position: relative;
+      isolation: isolate;
+      margin: 0;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 15.5px;
+      line-height: 1.65;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: max(2.5rem, env(safe-area-inset-bottom, 0px));
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+      transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+    }
 
-        /* --- UI COMPONENTS --- */
-        .header { 
-            height: 65px; background: var(--glass); backdrop-filter: blur(10px);
-            border-radius: 20px; display: flex; align-items: center; padding: 0 15px;
-            margin-bottom: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #fff;
-        }
-        .avatar { width: 42px; height: 42px; border-radius: 15px; background: #eee; overflow: hidden; border: 2px solid white; cursor: pointer; }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    img {
+      max-width: 100%;
+      display: block;
+    }
 
-        .status-tag { font-size: 9px; padding: 2px 6px; border-radius: 8px; margin-left: 5px; font-weight: bold; }
-        .online { background: var(--green-soft); color: #00b894; }
-        .offline { background: #dfe6e9; color: #636e72; }
+    h1, h2, h3 {
+      margin: 0;
+      text-wrap: balance;
+    }
 
-        /* --- MESSAGES --- */
-        .message-box { 
-            flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 12px;
-            background: url('https://www.transparenttextures.com/patterns/cubes.png');
-        }
-        .bubble { 
-            max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 15px; position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02); animation: pop 0.3s ease;
-        }
-        .bubble.sent { background: var(--pink-soft); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .bubble.received { background: white; color: var(--text-dark); align-self: flex-start; border-bottom-left-radius: 4px; }
+    p {
+      margin: 0;
+    }
 
-        /* --- INPUT & BUTTONS --- */
-        .input-bar { 
-            background: var(--glass); backdrop-filter: blur(10px); padding: 10px;
-            border-radius: 25px; display: flex; align-items: center; gap: 8px; box-shadow: 0 -5px 20px rgba(0,0,0,0.03);
-        }
-        .input-bar input { flex: 1; border: none; background: transparent; padding: 10px; outline: none; font-size: 15px; }
-        
-        .btn-action { width: 42px; height: 42px; border-radius: 50%; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .btn-mic { background: #636e72; }
-        .btn-mic.recording { background: #ff7675; animation: pulse 1s infinite; transform: scale(1.1); }
-        .btn-send { background: var(--blue-soft); }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-        /* --- CALL OVERLAY --- */
-        #callOverlay { 
-            position: fixed; inset: 0; background: linear-gradient(to bottom, #a29bfe, #6c5ce7);
-            z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white;
-        }
-        video { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
-        #localVideo { width: 100px; height: 140px; position: absolute; top: 20px; right: 20px; border: 3px solid white; z-index: 10; }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
 
-        .fab { position: absolute; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 18px; background: var(--pink-soft); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 15px rgba(255, 133, 161, 0.4); cursor: pointer; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-        @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    </style>
+    .wrap {
+      max-width: 68rem;
+      margin-inline: auto;
+    }
+
+    /* Ambient glow */
+    .glow {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 44rem;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .glow::before, .glow::after {
+      content: "";
+      position: absolute;
+      width: 44rem;
+      height: 44rem;
+      border-radius: 50%;
+      filter: blur(22px);
+    }
+
+    .glow::before {
+      top: -18rem;
+      right: -8rem;
+      background: radial-gradient(closest-side, var(--accent-glow), transparent);
+      animation: drift 22s ease-in-out infinite;
+    }
+
+    .glow::after {
+      top: 2rem;
+      left: -16rem;
+      background: radial-gradient(closest-side, rgba(56, 189, 248, 0.12), transparent);
+      animation: drift 28s ease-in-out infinite reverse;
+    }
+
+    /* Progress bar */
+    .progress {
+      position: fixed;
+      top: env(safe-area-inset-top, 0px);
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    /* Topbar */
+    .topbar {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      max-width: 68rem;
+      margin-inline: auto;
+      padding: 0.72rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.92rem;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 1.85rem;
+      height: 1.85rem;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 0.25rem 0;
+      transition: color 0.2s;
+    }
+
+    .nav-links a span {
+      color: var(--accent);
+      margin-right: 0.25rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--fg);
+    }
+
+    .theme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: var(--fg);
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      padding: 0.38rem 0.75rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* Hero */
+    .hero {
+      padding-block: 3.25rem 3rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 18.5rem;
+      gap: 2.75rem;
+      align-items: center;
+    }
+
+    .sys-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--accent);
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      padding: 0.32rem 0.78rem;
+      border-radius: 6px;
+      margin-bottom: 1.15rem;
+      animation: fadeup 0.75s var(--ease) 0.1s both;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2.2s infinite;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.4rem, 6.2vw, 4.15rem);
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+    }
+
+    .w {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
+      padding-bottom: 0.06em;
+    }
+
+    .w > span {
+      display: inline-block;
+      animation: rise 0.85s var(--ease) both;
+      animation-delay: calc(var(--i) * 0.1s + 0.15s);
+    }
+
+    .role-bar {
+      margin-top: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-mono);
+      font-size: clamp(0.92rem, 2vw, 1.05rem);
+      color: var(--accent-2);
+      animation: fadeup 0.8s var(--ease) 0.45s both;
+    }
+
+    .lead {
+      margin-top: 1.25rem;
+      max-width: 39rem;
+      color: var(--muted);
+      font-size: 1.02rem;
+      animation: fadeup 0.8s var(--ease) 0.6s both;
+    }
+
+    .hero-actions {
+      margin-top: 1.65rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      animation: fadeup 0.8s var(--ease) 0.75s both;
+    }
+
+    .btn-primary, .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      font-weight: 500;
+      padding: 0.66rem 1.15rem;
+      border-radius: 7px;
+      transition: transform 0.2s var(--ease), border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #091322;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px -10px var(--accent);
+    }
+
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--fg);
+      border: 1px solid var(--line-strong);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Hardware Module Portrait Card */
+    .hw-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      padding: 0.75rem;
+      box-shadow: 0 20px 40px -24px var(--shadow);
+      animation: fadeup 0.9s var(--ease) 0.35s both;
+    }
+
+    .hw-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      padding-bottom: 0.55rem;
+      margin-bottom: 0.55rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hw-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .hw-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--line-strong);
+    }
+
+    .hw-dots span:first-child {
+      background: var(--accent);
+    }
+
+    .ph {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--line);
+    }
+
+    .ph img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--ease);
+    }
+
+    .hw-card:hover .ph img {
+      transform: scale(1.03);
+    }
+
+    .hw-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+    }
+
+    /* Telemetry Contact Strip */
+    .telemetry {
+      margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 0.9rem;
+      animation: fadeup 0.8s var(--ease) 0.9s both;
+    }
+
+    .tele-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 0.85rem 1rem;
+      min-width: 0;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .tele-item:hover {
+      border-color: var(--line-strong);
+    }
+
+    a.tele-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .tele-icon {
+      display: grid;
+      place-items: center;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 7px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .tele-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .tele-val {
+      font-size: 0.94rem;
+      font-weight: 500;
+      margin-top: 0.12rem;
+      overflow-wrap: anywhere;
+    }
+
+    .tele-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--accent-2);
+    }
+
+    .copy {
+      margin-top: 0.45rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+      border-radius: 5px;
+      padding: 0.2rem 0.55rem;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.15s;
+    }
+
+    .copy:hover {
+      background: color-mix(in srgb, var(--accent) 22%, transparent);
+    }
+
+    /* Section Header Layout */
+    section {
+      padding-block: 3.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section:last-of-type {
+      border-bottom: 0;
+    }
+
+    .sec-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.65rem;
+    }
+
+    .sec-title {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .sec-num {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.2rem 0.5rem;
+      border-radius: 5px;
+    }
+
+    .sec-title h2 {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    .sec-sub {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Profile Console Box */
+    .console-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 1.35rem 1.5rem;
+    }
+
+    .console-box p {
+      max-width: 56rem;
+      color: var(--fg);
+    }
+
+    /* Bento Grid for Competencies */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .bento-card {
+      grid-column: span 4;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+    }
+
+    .bento-card.wide {
+      grid-column: span 6;
+    }
+
+    .bento-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .bento-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+
+    .bento-icon {
+      display: grid;
+      place-items: center;
+      width: 2.3rem;
+      height: 2.3rem;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .bento-code {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .bento-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+      font-weight: 600;
+    }
+
+    .bento-card p {
+      margin-top: 0.4rem;
+      color: var(--muted);
+      font-size: 0.91rem;
+      line-height: 1.55;
+    }
+
+    /* Tech Stack Matrix */
+    .stack-wrap {
+      margin-top: 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem;
+    }
+
+    .stack-head {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-2);
+      margin-bottom: 0.85rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .chips li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--surface-elevated);
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      padding: 0.34rem 0.75rem;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .chips li::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .chips li:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Split Grid for Education & Experience */
+    .split-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+      gap: 1.15rem;
+    }
+
+    .sys-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.3rem 1.4rem;
+      transition: border-color 0.25s;
+    }
+
+    .sys-panel:hover {
+      border-color: var(--line-strong);
+    }
+
+    .panel-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent);
+      margin-bottom: 0.45rem;
+    }
+
+    .sys-panel h3 {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 600;
+    }
+
+    .sys-panel .meta {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--accent-2);
+      margin-top: 0.2rem;
+    }
+
+    .sys-panel ul {
+      margin: 0.75rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    .sys-panel li + li {
+      margin-top: 0.35rem;
+    }
+
+    /* Organisation Circuit Timeline */
+    .timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 1.35rem;
+      border-left: 2px solid var(--line-strong);
+      display: grid;
+      gap: 1rem;
+    }
+
+    .timeline li {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 0.95rem 1.2rem;
+    }
+
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -1.78rem;
+      top: 1.25rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+    }
+
+    .timeline-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .timeline strong {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .timeline .year {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.16rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .timeline .org {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .note {
+      margin-top: 1.15rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    /* Projects Grid & Filter */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+
+    .filter-btn:hover {
+      color: var(--fg);
+      border-color: var(--accent);
+    }
+
+    .filter-btn.is-active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #091322;
+      font-weight: 600;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(19.5rem, 1fr));
+      gap: 1.15rem;
+    }
+
+    .project {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.25s var(--ease), border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    }
+
+    .project:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 18px 34px -22px var(--shadow);
+    }
+
+    .proj-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.9rem;
+    }
+
+    .proj-icon {
+      display: grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 8px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--line-strong);
+      color: var(--accent-2);
+    }
+
+    .proj-type {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: 0.18rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .project h3 {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .project .meta {
+      color: var(--accent);
+      font-size: 0.86rem;
+      margin-top: 0.3rem;
+    }
+
+    .project ul {
+      margin: 0.85rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .project li + li {
+      margin-top: 0.32rem;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.15rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent-2);
+      background: rgba(56, 189, 248, 0.10);
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    footer {
+      padding-block: 2.5rem 1.5rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    footer .who {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    footer .sub-foot {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    footer .sub-foot a {
+      color: var(--accent-2);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    footer .eof {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    /* Keyframes */
+    @keyframes rise {
+      from { transform: translateY(105%); }
+    }
+
+    @keyframes fadeup {
+      from { opacity: 0; transform: translateY(14px); }
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(4%, 6%, 0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.85); }
+    }
+
+    @media (max-width: 880px) {
+      .nav-links {
+        display: none;
+      }
+
+      .bento-card,
+      .bento-card.wide {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        padding-block: 2.25rem;
+      }
+
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2rem;
+      }
+
+      .hw-card {
+        order: -1;
+        max-width: 15.5rem;
+      }
+
+      .bento-card,
+      .bento-card.wide {
+        grid-column: span 12;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="progress" id="bar" aria-hidden="true"></div>
 
-<div class="app-container">
-    <div class="sidebar">
-        <div class="header">
-            <div class="avatar" onclick="openProfile()"><img id="myPhoto" src="https://via.placeholder.com/42"></div>
-            <div style="flex:1; margin-left: 10px;">
-                <b id="myDisplayName">Darsap User</b><br>
-                <small id="myIdDisplay" style="font-size: 10px; color: var(--blue-soft);"></small>
-            </div>
+  <header class="topbar">
+    <div class="topbar-inner wrap">
+      <a class="brand" href="#">
+        <span class="brand-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+        </span>
+        <span>DARIS.SYS</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navigasi utama">
+        <a href="#profil"><span>01.</span>Profil</a>
+        <a href="#keahlian"><span>02.</span>Kompetensi</a>
+        <a href="#rekam-jejak"><span>03.</span>Pengalaman</a>
+        <a href="#organisasi"><span>04.</span>Organisasi</a>
+        <a href="#proyek"><span>05.</span>Proyek</a>
+      </nav>
+
+      <button class="theme-btn" id="theme-toggle" type="button" aria-label="Ganti tema tampilan">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <span id="theme-label">Corporate Light</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="sys-pill">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span>S1 TEKNIK SISTEM KOMPUTER · UNIKOM (2026)</span>
+          </div>
+
+          <h1>
+            <span class="w" style="--i:0"><span>Daris</span></span>
+            <span class="w" style="--i:1"><span>Rifaldi</span></span>
+            <span class="w" style="--i:2"><span>Setiana</span></span>
+          </h1>
+
+          <div class="role-bar">
+            <span>&gt;_ Computer Systems Engineering</span>
+            <span>·</span>
+            <span>IT Operations, Data Integrity &amp; System Support</span>
+          </div>
+
+          <p class="lead">Lulusan Teknik Sistem Komputer dengan ketelitian tinggi dalam pengelolaan data, pemeliharaan infrastruktur perangkat keras, serta pengembangan sistem berbasis web dan IoT. Terbiasa bekerja sesuai standar operasional (SOP), menjaga akurasi informasi, dan berkolaborasi lintas unit secara profesional.</p>
+
+          <div class="hero-actions">
+            <a class="btn-primary" href="https://www.linkedin.com/in/daris-rifaldi-setiana-000470204/" target="_blank" rel="noopener noreferrer">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <span>Profil LinkedIn</span>
+            </a>
+            <a class="btn-ghost" href="#proyek">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>Lihat Proyek</span>
+            </a>
+          </div>
         </div>
-        <div class="contact-list" id="contactList" style="flex:1; overflow-y:auto;"></div>
-        <div class="fab" onclick="openAdd()">+</div>
-    </div>
 
-    <div class="chat-panel" id="chatPanel">
-        <div class="header">
-            <div onclick="closeChat()" style="font-size: 24px; cursor: pointer; margin-right: 10px;">✿</div>
-            <div class="avatar" id="activeAvatar"></div>
-            <div style="flex:1; margin-left: 10px;">
-                <b id="activeName">Nama</b><br>
-                <span id="activeStatusTag"></span>
-            </div>
-            <div style="display: flex; gap: 15px; font-size: 18px;">
-                <span onclick="startCall(false)" style="cursor:pointer">📞</span>
-                <span onclick="startCall(true)" style="cursor:pointer">📹</span>
-            </div>
+        <figure class="hw-card" style="margin:0">
+          <div class="hw-header">
+            <span>ID // CANDIDATE_01</span>
+            <div class="hw-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+          <div class="ph">
+            <img src="foto-daris.jpg" alt="Foto Daris Rifaldi Setiana" width="354" height="472" decoding="async">
+          </div>
+          <div class="hw-footer">
+            <span>UNIKOM · B.Eng</span>
+            <span>READY</span>
+          </div>
+        </figure>
+      </div>
+
+      <div class="telemetry">
+        <div class="tele-item">
+          <div class="tele-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <div>
+            <div class="tele-label">Comm // Email</div>
+            <div class="tele-val" id="email">rifaldi.daris@gmail.com</div>
+            <button class="copy" id="copy-email" type="button">Salin alamat</button>
+          </div>
         </div>
-        <div class="message-box" id="msgBox"></div>
-        <form class="input-bar" onsubmit="sendText(event)">
-            <input type="text" id="chatInp" placeholder="Tulis pesan manis..." autocomplete="off">
-            <button type="button" class="btn-action btn-mic" id="micBtn">🎤</button>
-            <button type="submit" class="btn-action btn-send" id="sendBtn" style="display:none;">➤</button>
-        </form>
-    </div>
-</div>
 
-<div class="modal-bg" id="profileModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; z-index:100;">
-    <div style="background:white; padding:25px; border-radius:25px; width:85%; max-width:320px;">
-        <h3 style="margin:0 0 15px; text-align:center;">Profil Saya</h3>
-        <center>
-            <div class="avatar" style="width:80px; height:80px; border-radius:25px;" onclick="document.getElementById('pInp').click()">
-                <img id="pPrev" src="">
+        <div class="tele-item">
+          <div class="tele-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="tele-label">Node // Domisili</div>
+            <div class="tele-val">Kabupaten Badung</div>
+          </div>
+        </div>
+
+        <a class="tele-item" href="https://www.linkedin.com/in/daris-rifaldi-setiana-000470204/" target="_blank" rel="noopener noreferrer">
+          <div class="tele-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          <div>
+            <div class="tele-label">Network // LinkedIn</div>
+            <div class="tele-val tele-link">
+              <span>Daris Rifaldi Setiana</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
             </div>
-            <input type="file" id="pInp" hidden onchange="previewImg(this)">
-        </center>
-        <input type="text" id="editName" style="width:100%; padding:12px; margin:15px 0; border:1px solid #eee; border-radius:12px;">
-        <button onclick="saveProfile()" style="width:100%; padding:12px; background:var(--pink-soft); color:white; border:none; border-radius:12px; font-weight:bold;">SIMPAN</button>
-        <button onclick="closeModals()" style="width:100%; background:none; border:none; color:gray; margin-top:10px;">Batal</button>
-    </div>
-</div>
+          </div>
+        </a>
+      </div>
+    </header>
 
-<div class="modal-bg" id="addModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; z-index:100;">
-    <div style="background:white; padding:25px; border-radius:25px; width:85%; max-width:320px;">
-        <h3>Tambah Teman</h3>
-        <input type="text" id="addName" placeholder="Nama" style="width:100%; padding:12px; margin-bottom:10px; border-radius:12px; border:1px solid #eee;">
-        <input type="text" id="addId" placeholder="ID Peer" style="width:100%; padding:12px; margin-bottom:15px; border-radius:12px; border:1px solid #eee;">
-        <button onclick="confirmAdd()" style="width:100%; padding:12px; background:var(--blue-soft); color:white; border:none; border-radius:12px;">TAMBAH</button>
-    </div>
-</div>
+    <section id="profil">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="sec-num">01</span>
+          <h2>Profil Profesional</h2>
+        </div>
+        <span class="sec-sub">// EXECUTIVE_SUMMARY</span>
+      </div>
+      <div class="console-box">
+        <p>Lulusan S1 Teknik Sistem Komputer, Universitas Komputer Indonesia (2026) dengan latar belakang teknis di bidang infrastruktur komputer, pemrosesan data, serta dukungan operasional sistem digital. Selama masa studi, kegiatan organisasi, dan pengalaman sebagai teknisi maupun asisten laboratorium, saya terbiasa menelusuri kendala secara sistematis, menjaga akurasi dan kerahasiaan data, mematuhi prosedur kerja (SOP), serta beradaptasi cepat terhadap aplikasi perusahaan yang baru.</p>
+      </div>
+    </section>
 
-<div id="callOverlay">
-    <h2 id="callStatus">Panggilan...</h2>
-    <div id="videoContainer" style="width:90%; height:60%; position:relative; display:none;">
-        <video id="remoteVideo" autoplay playsinline></video>
-        <video id="localVideo" autoplay muted playsinline></video>
-    </div>
-    <div style="margin-top:30px; display:flex; gap:20px;">
-        <button id="answerBtn" onclick="answerCall()" style="background:#55efc4; border:none; color:white; padding:15px 30px; border-radius:30px; display:none;">Terima</button>
-        <button onclick="endCall()" style="background:#ff7675; border:none; color:white; padding:15px 30px; border-radius:30px;">Tutup</button>
-    </div>
-</div>
+    <section id="keahlian">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="sec-num">02</span>
+          <h2>Kompetensi &amp; Tech Stack</h2>
+        </div>
+        <span class="sec-sub">// CORE_CAPABILITIES</span>
+      </div>
 
-<script>
-    let peer, myID, activeFriend, localStream, currentCall, mediaRecorder, audioChunks = [];
-    let connections = {};
-    let contacts = JSON.parse(localStorage.getItem('d_v13_c') || '[]');
-    let history = JSON.parse(localStorage.getItem('d_v13_h') || '{}');
-    let myProf = JSON.parse(localStorage.getItem('d_v13_p') || '{"name":"User","photo":""}');
+      <div class="bento">
+        <div class="bento-card wide">
+          <div>
+            <div class="bento-top">
+              <div class="bento-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              </div>
+              <span class="bento-code">MOD_01 // DATA_INTEGRITY</span>
+            </div>
+            <h3>Administrasi, Verifikasi &amp; Akurasi Data</h3>
+            <p>Terbiasa menginput, memvalidasi, memperbarui, dan merapikan data secara terstruktur serta menjaga ketepatan dokumentasi operasional harian.</p>
+          </div>
+        </div>
 
-    window.onload = () => {
-        myID = localStorage.getItem('d_v13_id') || Math.random().toString(36).substr(2, 6);
-        localStorage.setItem('d_v13_id', myID);
-        document.getElementById('myIdDisplay').innerText = "ID: " + myID;
-        
-        peer = new Peer(myID);
-        peer.on('connection', conn => setupConn(conn));
-        peer.on('call', call => {
-            currentCall = call;
-            document.getElementById('callOverlay').style.display = 'flex';
-            document.getElementById('answerBtn').style.display = 'block';
-            document.getElementById('callStatus').innerText = "Panggilan Masuk...";
+        <div class="bento-card wide">
+          <div>
+            <div class="bento-top">
+              <div class="bento-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+              </div>
+              <span class="bento-code">MOD_02 // IT_INFRASTRUCTURE</span>
+            </div>
+            <h3>Infrastruktur Komputer &amp; Dukungan Teknis</h3>
+            <p>Pemahaman arsitektur komputer, jaringan, basis data, pemrograman dasar, serta perawatan dan <em>troubleshooting</em> perangkat kerja.</p>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="bento-top">
+              <div class="bento-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
+              </div>
+              <span class="bento-code">MOD_03 // DIAGNOSTIC</span>
+            </div>
+            <h3>Ketelitian &amp; Analisis Masalah</h3>
+            <p>Mengidentifikasi kendala operasional maupun teknis secara runtut untuk menemukan solusi yang tepat sasaran.</p>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="bento-top">
+              <div class="bento-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <span class="bento-code">MOD_04 // OFFICE_SUITE</span>
+            </div>
+            <h3>Aplikasi Perkantoran</h3>
+            <p>Mahir mengoperasikan Microsoft Office dan perangkat lunak produktivitas untuk pelaporan dan rekapitulasi kerja.</p>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="bento-top">
+              <div class="bento-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <span class="bento-code">MOD_05 // COLLABORATION</span>
+            </div>
+            <h3>Komunikasi &amp; Kerja Tim</h3>
+            <p>Teruji berkoordinasi lintas peran dalam layanan teknis, kegiatan praktikum, dan kepengurusan organisasi.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack-wrap">
+        <div class="stack-head">&gt;_ KEAHLIAN TEKNIS &amp; PERANGKAT</div>
+        <ul class="chips">
+          <li>Microsoft Office</li>
+          <li>Basis Data</li>
+          <li>Jaringan Komputer</li>
+          <li>Troubleshooting Hardware</li>
+          <li>Perawatan Komputer</li>
+          <li>Python</li>
+          <li>Java</li>
+          <li>PHP</li>
+          <li>HTML/CSS</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="rekam-jejak">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="sec-num">03</span>
+          <h2>Pendidikan &amp; Pengalaman Kerja</h2>
+        </div>
+        <span class="sec-sub">// EXPERIENCE_LOGS</span>
+      </div>
+
+      <div class="split-grid">
+        <div class="sys-panel">
+          <div class="panel-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            <span>EDUCATION // DEGREE</span>
+          </div>
+          <h3>S1 Teknik Sistem Komputer</h3>
+          <div class="meta">Universitas Komputer Indonesia · 2026</div>
+          <ul>
+            <li>Mempelajari arsitektur komputer, sistem digital, jaringan komputer, manajemen basis data, serta rekayasa sistem berbasis mikrokontroler.</li>
+          </ul>
+        </div>
+
+        <div class="sys-panel">
+          <div class="panel-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span>EXPERIENCE // IT_SUPPORT</span>
+          </div>
+          <h3>Teknisi Servis Komputer</h3>
+          <ul>
+            <li>Melakukan inspeksi dan diagnosis awal permasalahan pada perangkat kerja pengguna secara sistematis.</li>
+            <li>Menjalankan pemeliharaan perangkat keras serta <em>troubleshooting</em> sesuai prosedur layanan.</li>
+          </ul>
+        </div>
+
+        <div class="sys-panel">
+          <div class="panel-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+            <span>EXPERIENCE // LAB_OPERATIONS</span>
+          </div>
+          <h3>Asisten Laboratorium Sistem Digital</h3>
+          <ul>
+            <li>Mendukung kelancaran operasional praktikum dan kesiapan perangkat teknis laboratorium.</li>
+            <li>Berkoordinasi aktif dengan mahasiswa serta pengelola laboratorium guna memastikan kegiatan berjalan tertib.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="organisasi">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="sec-num">04</span>
+          <h2>Rekam Jejak Organisasi</h2>
+        </div>
+        <span class="sec-sub">// LEADERSHIP_TRACK</span>
+      </div>
+
+      <ul class="timeline">
+        <li>
+          <div class="timeline-row">
+            <strong>Ketua Divisi Litbang</strong>
+            <span class="year">2023–2024</span>
+          </div>
+          <span class="org">Teknik Komputer, Universitas Komputer Indonesia</span>
+        </li>
+        <li>
+          <div class="timeline-row">
+            <strong>Wakil Ketua MPK</strong>
+            <span class="year">2021–2022</span>
+          </div>
+          <span class="org">SMK Pasundan Rancaekek</span>
+        </li>
+        <li>
+          <div class="timeline-row">
+            <strong>Anggota Dewan Kerja</strong>
+            <span class="year">2021–2022</span>
+          </div>
+          <span class="org">Ranting Pramuka Rancaekek</span>
+        </li>
+        <li>
+          <div class="timeline-row">
+            <strong>Ketua Divisi Humas OSIS</strong>
+            <span class="year">2020–2021</span>
+          </div>
+          <span class="org">SMK Pasundan Rancaekek</span>
+        </li>
+      </ul>
+      <p class="note">Pengalaman berorganisasi membentuk kedisiplinan, komunikasi yang jelas, serta rasa tanggung jawab dalam bekerja sama mencapai target tim.</p>
+    </section>
+
+    <section id="proyek">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="sec-num">05</span>
+          <h2>Proyek &amp; Prototipe</h2>
+        </div>
+
+        <div class="filter-bar" role="group" aria-label="Filter proyek">
+          <button class="filter-btn is-active" type="button" data-filter="all">ALL (03)</button>
+          <button class="filter-btn" type="button" data-filter="iot">EMBEDDED / IOT</button>
+          <button class="filter-btn" type="button" data-filter="web">WEB / DATABASE</button>
+        </div>
+      </div>
+
+      <div class="projects-grid">
+        <article class="project" data-category="iot">
+          <div>
+            <div class="proj-top">
+              <div class="proj-icon" aria-hidden="true">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+              </div>
+              <span class="proj-type">THESIS_SYSTEM</span>
+            </div>
+            <h3>Media Pembelajaran Interaktif Sistem Pencernaan Manusia</h3>
+            <div class="meta">Prototipe Raspberry Pi dengan <em>Adaptive Learning</em></div>
+            <ul>
+              <li>Mengintegrasikan Raspberry Pi, sensor sentuh, RFID, tombol fisik, dan keluaran audio.</li>
+              <li>Merancang alur evaluasi kuis dengan tingkat kesulitan soal yang menyesuaikan jawaban pengguna.</li>
+              <li>Menguji keandalan prototipe hingga diterbitkan dalam publikasi jurnal.</li>
+            </ul>
+          </div>
+          <div class="tag-list">
+            <span class="tag">Raspberry Pi</span>
+            <span class="tag">RFID</span>
+            <span class="tag">Adaptive Learning</span>
+          </div>
+        </article>
+
+        <article class="project" data-category="web">
+          <div>
+            <div class="proj-top">
+              <div class="proj-icon" aria-hidden="true">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              </div>
+              <span class="proj-type">DATA_MANAGEMENT</span>
+            </div>
+            <h3>Website Pengelolaan Sistem Pembelajaran</h3>
+            <div class="meta">Aplikasi Web Berbasis PHP &amp; MySQL</div>
+            <ul>
+              <li>Membangun modul pengelolaan data siswa dan guru secara terstruktur.</li>
+              <li>Menyediakan fitur manajemen serta pembaruan bank soal dan materi pembelajaran.</li>
+              <li>Menyajikan rekapitulasi dan pemantauan hasil belajar secara akurat.</li>
+            </ul>
+          </div>
+          <div class="tag-list">
+            <span class="tag">PHP</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Database Admin</span>
+          </div>
+        </article>
+
+        <article class="project" data-category="iot">
+          <div>
+            <div class="proj-top">
+              <div class="proj-icon" aria-hidden="true">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+              <span class="proj-type">IOT_AUTOMATION</span>
+            </div>
+            <h3>EcoSmart Plug</h3>
+            <div class="meta">Stop Kontak Pintar Berbasis ESP8266 &amp; Sensor Arus</div>
+            <ul>
+              <li>Memantau arus listrik secara <em>real-time</em> menggunakan sensor ACS712 untuk mendeteksi beban siaga (<em>standby</em>).</li>
+              <li>Memutus aliran daya otomatis melalui aktuator <em>relay</em> guna meningkatkan efisiensi energi.</li>
+            </ul>
+          </div>
+          <div class="tag-list">
+            <span class="tag">ESP8266</span>
+            <span class="tag">ACS712</span>
+            <span class="tag">Relay</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div>
+        <div class="who">Daris Rifaldi Setiana</div>
+        <div class="sub-foot">
+          rifaldi.daris@gmail.com · Kabupaten Badung ·
+          <a href="https://www.linkedin.com/in/daris-rifaldi-setiana-000470204/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div>
+      <div class="eof">TERIMA KASIH ATAS WAKTU &amp; KESEMPATANNYA</div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      /* Copy email */
+      var btn = document.getElementById('copy-email');
+      var emailEl = document.getElementById('email');
+      if (btn && emailEl) {
+        btn.addEventListener('click', function () {
+          var text = emailEl.textContent.trim();
+          function onSuccess() {
+            btn.textContent = 'Tersalin ✓';
+            setTimeout(function () { btn.textContent = 'Salin alamat'; }, 2000);
+          }
+          function fallback() {
+            try {
+              var r = document.createRange();
+              r.selectNodeContents(emailEl);
+              var s = window.getSelection();
+              s.removeAllRanges();
+              s.addRange(r);
+              btn.textContent = 'Terpilih, salin manual';
+            } catch (e) {}
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(onSuccess, fallback);
+          } else {
+            fallback();
+          }
         });
+      }
 
-        initMicLogic();
-        updateMyUI();
-        renderContacts();
-        setInterval(refreshOnlineStatus, 5000);
-    };
-
-    function setupConn(conn) {
-        connections[conn.peer] = conn;
-        if(!contacts.find(c => c.id === conn.peer)) {
-            contacts.push({id: conn.peer, name: "Teman Baru", photo: "", online: true});
-            saveContacts();
+      /* Theme toggle */
+      var root = document.documentElement;
+      var themeBtn = document.getElementById('theme-toggle');
+      var themeLabel = document.getElementById('theme-label');
+      function syncThemeLabel() {
+        var isDark = root.getAttribute('data-theme') !== 'light';
+        if (themeLabel) {
+          themeLabel.textContent = isDark ? 'Corporate Light' : 'Navy Dark';
         }
-        conn.on('data', data => {
-            if(data.type === 'sync') {
-                let f = contacts.find(c => c.id === conn.peer);
-                if(f) { f.name = data.name; f.photo = data.photo; saveContacts(); renderContacts(); }
-            } else if(data.type === 'read') {
-                markRead(conn.peer, data.ids);
-            } else {
-                saveMsg(conn.peer, 'received', data.type, data.content, data.id);
-                if(activeFriend?.id === conn.peer) {
-                    conn.send({type: 'read', ids: [data.id]});
-                    renderMessages();
-                }
-            }
+      }
+      syncThemeLabel();
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function () {
+          var isDark = root.getAttribute('data-theme') !== 'light';
+          root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+          syncThemeLabel();
         });
-        conn.on('open', () => conn.send({type:'sync', name: myProf.name, photo: myProf.photo}));
-    }
+      }
 
-    // --- MESSAGING ---
-    function sendText(e) {
-        e.preventDefault();
-        const inp = document.getElementById('chatInp');
-        if(inp.value.trim() && connections[activeFriend.id]?.open) {
-            const id = Date.now();
-            connections[activeFriend.id].send({type:'text', content: inp.value, id});
-            saveMsg(activeFriend.id, 'sent', 'text', inp.value, id, 'delivered');
-            renderMessages();
-            inp.value = "";
-            document.getElementById('micBtn').style.display = 'flex';
-            document.getElementById('sendBtn').style.display = 'none';
-        }
-    }
-
-    function saveMsg(id, dir, type, content, msgId, status = 'sent') {
-        if(!history[id]) history[id] = [];
-        history[id].push({id: msgId, dir, type, content, status, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})});
-        localStorage.setItem('d_v13_h', JSON.stringify(history));
-        renderContacts();
-    }
-
-    function markRead(friendId, ids) {
-        if(history[friendId]) {
-            history[friendId].forEach(m => { if(ids.includes(m.id)) m.status = 'read'; });
-            localStorage.setItem('d_v13_h', JSON.stringify(history));
-            if(activeFriend?.id === friendId) renderMessages();
-        }
-    }
-
-    function renderMessages() {
-        const box = document.getElementById('msgBox');
-        box.innerHTML = "";
-        const msgs = history[activeFriend.id] || [];
-        
-        // Auto read
-        const unread = msgs.filter(m => m.dir === 'received' && m.status !== 'read').map(m => m.id);
-        if(unread.length > 0 && connections[activeFriend.id]?.open) {
-            connections[activeFriend.id].send({type: 'read', ids: unread});
-            msgs.forEach(m => { if(unread.includes(m.id)) m.status = 'read'; });
-            localStorage.setItem('d_v13_h', JSON.stringify(history));
-        }
-
-        msgs.forEach(m => {
-            let body = m.type === 'vn' ? `<audio controls style="width:200px"><source src="${m.content}"></audio>` : m.content;
-            let check = "";
-            if(m.dir === 'sent') {
-                if(m.status === 'sent') check = "✿";
-                else if(m.status === 'delivered') check = "✿✿";
-                else if(m.status === 'read') check = "<span style='color:#74b9ff'>✿✿</span>";
-            }
-            box.innerHTML += `<div class="bubble ${m.dir}">${body}<div style="font-size:9px; text-align:right; margin-top:4px; opacity:0.6;">${m.time} ${check}</div></div>`;
+      /* Project filter */
+      var filterBtns = document.querySelectorAll('.filter-btn');
+      var projects = document.querySelectorAll('.project');
+      filterBtns.forEach(function (fBtn) {
+        fBtn.addEventListener('click', function () {
+          var cat = fBtn.getAttribute('data-filter');
+          filterBtns.forEach(function (b) { b.classList.remove('is-active'); });
+          fBtn.classList.add('is-active');
+          projects.forEach(function (proj) {
+            var match = cat === 'all' || proj.getAttribute('data-category') === cat;
+            proj.hidden = !match;
+          });
         });
-        box.scrollTop = box.scrollHeight;
-    }
+      });
 
-    // --- MULTIMEDIA (VN & CALL) ---
-    function initMicLogic() {
-        const mic = document.getElementById('micBtn'), inp = document.getElementById('chatInp'), snd = document.getElementById('sendBtn');
-        inp.oninput = () => { let v = inp.value.trim().length > 0; mic.style.display = v ? 'none' : 'flex'; snd.style.display = v ? 'flex' : 'none'; };
-
-        mic.ontouchstart = mic.onmousedown = async (e) => {
-            e.preventDefault(); audioChunks = [];
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.ondataavailable = ev => audioChunks.push(ev.data);
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(audioChunks, { type: 'audio/ogg' });
-                const reader = new FileReader();
-                reader.onload = () => {
-                    if(connections[activeFriend.id]?.open) {
-                        const id = Date.now();
-                        connections[activeFriend.id].send({type:'vn', content: reader.result, id});
-                        saveMsg(activeFriend.id, 'sent', 'vn', reader.result, id);
-                        renderMessages();
-                    }
-                };
-                reader.readAsDataURL(blob);
-            };
-            mediaRecorder.start(); mic.classList.add('recording');
+      /* Scroll progress */
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var bar = document.getElementById('bar');
+      if (bar && !reduce) {
+        var ticking = false;
+        var update = function () {
+          var d = document.documentElement;
+          var max = d.scrollHeight - window.innerHeight;
+          var p = max > 0 ? Math.min(1, Math.max(0, (window.scrollY || d.scrollTop) / max)) : 0;
+          bar.style.transform = 'scaleX(' + p + ')';
+          ticking = false;
         };
-        mic.ontouchend = mic.onmouseup = () => { if(mediaRecorder) mediaRecorder.stop(); mic.classList.remove('recording'); };
-    }
-
-    async function startCall(vid) {
-        document.getElementById('callOverlay').style.display = 'flex';
-        document.getElementById('callStatus').innerText = "Menghubungi...";
-        localStream = await navigator.mediaDevices.getUserMedia({video: vid, audio: true});
-        if(vid) { document.getElementById('videoContainer').style.display='block'; document.getElementById('localVideo').srcObject = localStream; }
-        const call = peer.call(activeFriend.id, localStream, {metadata:{video:vid}});
-        handleCall(call);
-    }
-
-    async function answerCall() {
-        const vid = currentCall.options.metadata.video;
-        localStream = await navigator.mediaDevices.getUserMedia({video: vid, audio: true});
-        currentCall.answer(localStream);
-        if(vid) { document.getElementById('videoContainer').style.display='block'; document.getElementById('localVideo').srcObject = localStream; }
-        handleCall(currentCall);
-    }
-
-    function handleCall(call) {
-        currentCall = call;
-        call.on('stream', rs => {
-            document.getElementById('callStatus').innerText = "Panggilan Aktif";
-            if(call.options.metadata.video) document.getElementById('remoteVideo').srcObject = rs;
-        });
-        call.on('close', endCall);
-    }
-
-    function endCall() {
-        if(currentCall) currentCall.close();
-        if(localStream) localStream.getTracks().forEach(t => t.stop());
-        document.getElementById('callOverlay').style.display = 'none';
-        document.getElementById('videoContainer').style.display = 'none';
-    }
-
-    // --- UI NAV ---
-    function renderContacts() {
-        const list = document.getElementById('contactList'); list.innerHTML = "";
-        contacts.forEach(c => {
-            const h = history[c.id] || [], last = h.length > 0 ? (h[h.length-1].type==='vn'?'🎤 VN':h[h.length-1].content) : "Chat yuk!";
-            list.innerHTML += `<div class="contact-item" onclick="openChat('${c.id}')" style="background:white; padding:15px; border-radius:20px; margin-bottom:10px; display:flex; align-items:center; gap:12px; box-shadow:0 4px 10px rgba(0,0,0,0.02);">
-                <div class="avatar">${c.photo ? `<img src="${c.photo}">` : ''}</div>
-                <div style="flex:1"><b>${c.name}</b> <span class="status-tag ${c.online?'online':'offline'}">${c.online?'Aktif':'Off'}</span><p style="margin:4px 0 0; font-size:12px; color:gray;">${last.substring(0,25)}</p></div>
-            </div>`;
-        });
-    }
-
-    function openChat(id) {
-        activeFriend = contacts.find(c => c.id === id);
-        document.getElementById('activeName').innerText = activeFriend.name;
-        document.getElementById('activeAvatar').innerHTML = activeFriend.photo ? `<img src="${activeFriend.photo}">` : '';
-        document.getElementById('chatPanel').classList.add('active');
-        refreshOnlineStatus(); renderMessages();
-        if(!connections[id]) setupConn(peer.connect(id));
-    }
-
-    function updateMyUI() {
-        document.getElementById('myPhoto').src = myProf.photo || 'https://via.placeholder.com/42';
-        document.getElementById('myDisplayName').innerText = myProf.name;
-        document.getElementById('editName').value = myProf.name;
-        document.getElementById('pPrev').src = myProf.photo || 'https://via.placeholder.com/42';
-    }
-
-    function refreshOnlineStatus() {
-        contacts.forEach(c => { c.online = connections[c.id] && connections[c.id].open; });
-        renderContacts();
-        if(activeFriend) {
-            const isOn = contacts.find(c => c.id === activeFriend.id)?.online;
-            document.getElementById('activeStatusTag').className = 'status-tag ' + (isOn?'online':'offline');
-            document.getElementById('activeStatusTag').innerText = isOn ? 'Aktif' : 'Off';
-        }
-    }
-
-    function openProfile() { document.getElementById('profileModal').style.display='flex'; }
-    function closeChat() { document.getElementById('chatPanel').classList.remove('active'); }
-    function openAdd() { document.getElementById('addModal').style.display='flex'; }
-    function closeModals() { document.querySelectorAll('.modal-bg').forEach(m => m.style.display='none'); }
-    function saveContacts() { localStorage.setItem('d_v13_c', JSON.stringify(contacts)); }
-    function previewImg(i){ if(i.files[0]){ let r=new FileReader(); r.onload=e=>document.getElementById('pPrev').src=e.target.result; r.readAsDataURL(i.files[0]); } }
-    function saveProfile() {
-        myProf.name = document.getElementById('editName').value;
-        myProf.photo = document.getElementById('pPrev').src;
-        localStorage.setItem('d_v13_p', JSON.stringify(myProf));
-        updateMyUI(); closeModals();
-        Object.values(connections).forEach(c => c.open && c.send({type:'sync', name:myProf.name, photo:myProf.photo}));
-    }
-    function confirmAdd() {
-        const n = document.getElementById('addName').value, i = document.getElementById('addId').value;
-        if(n && i) { contacts.push({id:i, name:n, photo:"", online:false}); saveContacts(); renderContacts(); closeModals(); }
-    }
-</script>
+        window.addEventListener('scroll', function () {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+          }
+        }, { passive: true });
+        update();
+      }
+    })();
+  </script>
 </body>
 </html>
